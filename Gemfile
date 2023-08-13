@@ -38,3 +38,4 @@ group :production do
 end
 
 gem "securerandom"
+gem "cssbundling-rails"
