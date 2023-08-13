@@ -1,24 +1,21 @@
-# README
+# Whispera - 青春の記憶を共有するアプリ
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Whisperaは、青春にまつわるエピソードや思い出を共有し、他のユーザーと交流するためのプラットフォームです。
 
-Things you may want to cover:
+## 概要
 
-* Ruby version
+Whisperaは、青春の一瞬や感情をテーマにしたエピソードを投稿し、共有するためのアプリです。
+ユーザーはアプリから提供されたテーマに対してエピソードを投稿し、自分の青春の思い出を綴ることができます。
+他のユーザーのエピソードにいいねを押すことで、共感や交流を楽しむことができます。
 
-* System dependencies
+## 機能
 
-* Configuration
+- エピソード投稿: タイトルとテーマを付けて、青春のエピソードを投稿できます。
+- エピソード一覧: 他のユーザーの投稿を閲覧し、いいねを押すことができます。
+- いいねランキング: 人気のあるエピソードがランキングで表示されます。
+- Twitter共有: エピソードをいいねした際に、Twitterで共有することができます。
 
-* Database creation
+## 使用技術
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Ruby: Ver 3.1.2
+- Ruby on Rails: Ver 7.0.7
