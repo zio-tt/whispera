@@ -1,2 +1,12 @@
-<h1>Episodes#new</h1>
-<p>Find me in app/views/episodes/new.html.erb</p>
+<%= form_with(model: @episode, url: episodes_path) do |form| %>
+  <%= form.label :title %>
+  <%= form.text_field :title %>
+
+  <%= form.label :content %>
+  <%= form.text_area :content %>
+
+  <%= form.label :theme %>
+  <%= form.select :theme, Episode.themes.keys %>
+
+  <%= form.submit 'Create Episode', class: 'btn btn-primary' %>
+<% end %>

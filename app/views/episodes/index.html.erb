@@ -1,2 +1,6 @@
-<h1>Episodes#index</h1>
-<p>Find me in app/views/episodes/index.html.erb</p>
+<h1>思い出たち</h1>
+<ul>
+  <% @episodes.each do |episode| %>
+    <li><%= link_to episode.title, episode_path(episode) %></li>
+  <% end %>
+</ul>

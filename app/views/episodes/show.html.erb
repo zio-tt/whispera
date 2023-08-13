@@ -1,2 +1,11 @@
-<h1>Episodes#show</h1>
-<p>Find me in app/views/episodes/show.html.erb</p>
+<h1><%= @episode.title %></h1>
+<p><%= @episode.content %></p>
+<p>Theme: <%= @episode.theme %></p>
+
+<% if session[:guest] %>
+  <% if @episode.likes.find_by(guest_token: session[:guest]) %>
+    <%= link_to 'いいねを取り消す', episode_like_path(@episode, @episode.likes.find_by(guest_token: session[:guest]), method: :delete), class: 'btn btn-danger' %>
+  <% else %>
+    <%= link_to 'いいねする', episode_likes_path(@episode), method: :post, class: 'btn btn-success' %>
+  <% end %>
+<% end %>
