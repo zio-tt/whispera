@@ -1,2 +1,9 @@
-<h1>Likes#ranking</h1>
-<p>Find me in app/views/likes/ranking.html.erb</p>
+<h1>心に残った思い出たち</h1>
+<ol>
+  <% @episodes.each do |episode| %>
+    <li>
+      <%= link_to episode.title, episode_path(episode) %> 
+      (Likes: <%= episode.likes.count %>)
+    </li>
+  <% end %>
+</ol>
