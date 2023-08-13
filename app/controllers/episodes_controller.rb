@@ -1,6 +1,9 @@
 class EpisodesController < ApplicationController
   def index
     @episodes = Episode.all
+    if session[:guest].nil?
+      session[:guest] = SecureRandom.hex(10)
+    end
     # エピソード一覧ページの表示
   end
 

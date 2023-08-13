@@ -12,7 +12,7 @@ class LikesController < ApplicationController
   def destroy
     @episode = Episode.find(params[:episode_id])
     @like = @episode.likes.find_by(guest_token: session[:guest])
-    if @like.destroy
+    if @like && @like.destroy
       redirect_to episode_path(@episode), notice: 'いいねを取り消しました。'
     else
       redirect_to episode_path(@episode), alert: 'いいねの取り消しに失敗しました。'
