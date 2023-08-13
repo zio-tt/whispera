@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  root "top#index"
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :episodes, only: %i[index new create show] do
+    resources :like, only: %i[create destroy]
+  end
+
+  get "ranking", to: "likes#ranking"
 end
