@@ -1,0 +1,14 @@
+<%= form_with(model: episode, url: episode_path(episode), local: true) do |form| %>
+  <%= form.label :title, 'タイトル' %>
+  <%= form.text_field :title %>
+
+  <%= form.label :content, '内容' %>
+  <%= form.text_area :content %>
+
+  <%= form.label :theme, 'テーマ' %>
+  <div id="episode_theme">
+    <%= form.select :theme, Episode::THEMES %>
+  </div>
+
+  <%= form.submit 'エピソードを更新', class: 'btn btn-primary' %>
+<% end %>

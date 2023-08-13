@@ -1,10 +1,11 @@
-<div class="hero absolute inset-0 bg-base-200">
+<div class="hero min-h-screen bg-base-200">
   <div class="hero-content text-center">
-    <div class="w-full">
-     <ul>
-        <li><%= link_to '思い出を綴る', new_episode_path, class: 'btn btn-primary' %></li>
-        <li><%= link_to '思い出を覗く', episodes_path, class: 'btn btn-secondary' %></li>
-      </ul>
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold">Tsuduri</h1>
+      <p class="py-6">原稿用紙一枚分の物語を共有する。</p>
+      <%= button_to "思い出を綴る", { controller: "episodes", action: "new"}, class: "btn btn-primary", method: :get %>
+      </br>
+      <%= button_to "思い出を覗く", { controller: "episodes", action: "index"}, class: "btn btn-primary", method: :get %>
     </div>
   </div>
 </div>

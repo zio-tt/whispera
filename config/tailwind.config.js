@@ -5,12 +5,14 @@ module.exports = {
     './public/*.html',
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
-    './app/views/**/*.{erb,haml,html,slim}'
+    './app/views/**/*.{erb,haml,html,slim}',
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        body: [
+          'TsukuARdGothic-Regular',
+        ],
       },
     },
   },
@@ -19,7 +21,7 @@ module.exports = {
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
-    require('daisyui'),
+    require("daisyui"),
   ],
   daisyui: {
     themes: [
@@ -53,5 +55,12 @@ module.exports = {
       "coffee",
       "winter",
     ],
+    darkTheme: "dark",
+    base: true,
+    styled: true,
+    utils: true,
+    rtl: false,
+    prefix: "",
+    logs: true,
   },
 }
