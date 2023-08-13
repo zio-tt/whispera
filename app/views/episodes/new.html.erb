@@ -1,12 +1,41 @@
 <%= form_with(model: @episode, url: episodes_path) do |form| %>
-  <%= form.label :title %>
+  <%= form.label :title, 'タイトル' %>
   <%= form.text_field :title %>
 
-  <%= form.label :content %>
+  <%= form.label :content, '内容' %>
   <%= form.text_area :content %>
 
-  <%= form.label :theme %>
-  <%= form.select :theme, Episode.themes.keys %>
+  <%= form.label :theme, 'テーマ' %>
+  <%= form.select :theme, Episode::THEMES, {} , class: "episode_theme" %>
 
-  <%= form.submit 'Create Episode', class: 'btn btn-primary' %>
+  <button type="button" id="random-theme-button">ランダムテーマ選択</button>
+
+  <%= form.submit 'エピソードを投稿', class: 'btn btn-primary' %>
 <% end %>
+
+<% content_for :reload do %>
+  <meta name="turbo-visit-control" content="reload">
+<% end %>
+
+
+<div id="random-theme-data" data-themes='<%= raw Episode::THEMES.to_json %>'></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const randomThemeButton = document.getElementById('random-theme-button');
+    const themeSelect = document.getElementById('episode_theme');
+    const randomThemeData = document.getElementById('random-theme-data');
+
+    if (randomThemeData) {
+      const themesJson = randomThemeData.getAttribute('data-themes');
+      const themes = JSON.parse(themesJson);
+
+      randomThemeButton.addEventListener('click', function () {
+        if (themes.length > 0) {
+          const randomIndex = Math.floor(Math.random() * themes.length);
+          themeSelect.value = themes[randomIndex];
+        }
+      });
+    }
+  });
+</script>
