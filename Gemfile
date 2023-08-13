@@ -39,3 +39,5 @@ end
 
 gem "securerandom"
 gem "cssbundling-rails"
+gem "jsbundling-rails"
+gem "tailwindcss-rails"

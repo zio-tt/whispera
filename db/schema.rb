@@ -10,14 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_13_055506) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_13_134537) do
   create_table "episodes", force: :cascade do |t|
     t.string "title"
     t.string "theme"
     t.text "content"
-    t.integer "likes_count"
+    t.integer "likes_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "guest_token"
   end
 
   create_table "likes", force: :cascade do |t|

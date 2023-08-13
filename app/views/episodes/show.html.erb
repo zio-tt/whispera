@@ -1,11 +1,82 @@
 <h1><%= @episode.title %></h1>
 <p><%= @episode.content %></p>
-<p>Theme: <%= @episode.theme %></p>
+<p><%= @episode.theme %></p>
 
-<% if session[:guest] %>
+<% if session[:guest] && @episode.guest_token == session[:guest] %>
+  <%= link_to '編集', edit_episode_path(@episode), class: 'btn btn-primary' %>
+  <%= link_to '削除', episode_path(@episode), data: { "turbo_method": :delete }, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger' %>
+<% end %>
+
+<% if session[:guest] && @episode.guest_token != session[:guest] %>
   <% if @episode.likes.find_by(guest_token: session[:guest]) %>
-    <%= link_to 'いいねを取り消す', episode_unlike_path(@episode), data: { "turbo_method": :delete }, class: 'btn btn-danger' %>
+    <%= link_to 'いいねを取り消す', episode_unlike_path(@episode),
+      data: { "turbo_method": :delete }, class: 'btn btn-danger' %>
   <% else %>
-    <%= link_to 'いいねする', episode_like_path(@episode), data: { "turbo_method": :post }, class: 'btn btn-success' %>
+    <%= link_to 'いいねする', episode_like_path(@episode),
+      data: { "turbo_method": :post }, class: 'btn btn-success' %>
   <% end %>
 <% end %>
+
+<% if session[:guest] && @episode.guest_token != session[:guest] %>
+  <div class="like-buttons">
+    <% if @episode.likes.find_by(guest_token: session[:guest]) %>
+      <button data-action="unlike" data-episode-id="<%= @episode.id %>"
+              class="btn btn-danger">いいねを取り消す</button>
+    <% else %>
+      <button data-action="like" data-episode-id="<%= @episode.id %>"
+              class="btn btn-success">いいねする</button>
+    <% end %>
+  </div>
+<% end %>
+
+<%= link_to '戻る', episodes_path, class: 'btn btn-secondary' %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const likeButtons = document.querySelectorAll('[data-action="like"]');
+    const unlikeButtons = document.querySelectorAll('[data-action="unlike"]');
+
+    likeButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const episodeId = button.getAttribute('data-episode-id');
+        const url = "/episodes/" + episodeId + "/like";
+        const post_options = { turbo_method: "post" };
+
+        fetch(url, post_options)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // いいねが成功した場合の処理
+            }
+          });
+      });
+    });
+
+    unlikeButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const episodeId = button.getAttribute('data-episode-id');
+        const url1 = "/episodes/"
+        const url2 = "/unlike"
+
+        fetch(url1 + episodeId + url2, { turbo_method: 'DELETE' })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // いいね取り消しが成功した場合の処理
+            }
+          });
+      });
+    });
+
+    // モーダルウィンドウ表示のコードをここに追加
+    // 例: モーダルを表示するためのボタンをクリックしたときの処理
+    // modalButton.addEventListener('click', function () {
+    //   // モーダルを表示するコード
+    // });
+  });
+</script>
+
+<% content_for :reload do %>
+  <meta name="turbo-visit-control" content="reload">
+<% end %>
+
