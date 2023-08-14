@@ -1,9 +1,9 @@
 class Episode < ApplicationRecord
   has_many :likes
 
-  validates :title, presence: true, length: { maximum: 30 }
+  validates :title, presence: true, length: { maximum: 10 }
   validates :theme, presence: true
-  validates :content, presence: true, length: { maximum: 400 }
+  validates :content, presence: true, length: { maximum: 360 }
 
   THEMES = [
     '','恋愛', '友情', '勉強', '部活', 'サークル', '先輩後輩', '失恋', '卒業', '入学', '初デート',
