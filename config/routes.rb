@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       post "like", action: :create
       delete "unlike", action: :destroy
     end
+    collection do
+      get 'search'
+    end
   end
 
   get "ranking", to: "likes#ranking"

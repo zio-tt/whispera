@@ -1,11 +1,13 @@
-<h1>いいねランキング</h1>
-
-<% if @ranking.any? %>
-  <ol>
-    <% @ranking.each_with_index do |episode, index| %>
-      <li><%= link_to "#{index + 1}. #{episode.title} (#{episode.likes_count}いいね)", episode_path(episode) %></li>
-    <% end %>
-  </ol>
-<% else %>
-  <p>いいねされたエピソードはありません。</p>
+<% if @episodes.any? %>
+  <section class="text-gray-600 body-font">
+    <div class="container px-5 py-10 mx-auto">
+      <div class="flex flex-wrap -m-4">
+      <%= render @episodes %>
+      </div>
+    </div>
+  </section>
 <% end %>
+
+<div class="mx-auto my-1 text-center">
+  <%= paginate @episodes %>
+</div>

@@ -1,0 +1,13 @@
+            <input id="search-title" class="input input-bordered join-item" placeholder="Title"/>
+          </div>
+        </div>
+        <select id="search-theme" class="select select-bordered join-item">
+          <option disabled selected>Theme</option>
+          <%= @themes.each do |theme| %>
+            <option><%= theme %></option>
+          <% end %>
+        </select>
+        <div class="indicator">
+          <button id="search-button" class="btn join-item">Search</button>
+        </div>
+
