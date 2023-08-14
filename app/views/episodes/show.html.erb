@@ -1,82 +1,128 @@
-<h1><%= @episode.title %></h1>
-<p><%= @episode.content %></p>
-<p><%= @episode.theme %></p>
+<section class="text-gray-600 body-font relative">
+  <div class="container px-5 py-16 mx-auto flex sm:flex-nowrap flex-wrap">
 
-<% if session[:guest] && @episode.guest_token == session[:guest] %>
-  <%= link_to '編集', edit_episode_path(@episode), class: 'btn btn-primary' %>
-  <%= link_to '削除', episode_path(@episode), data: { "turbo_method": :delete }, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger' %>
-<% end %>
+    <!-- ここから入力フォーム -->
+    <div class="lg:w-2/5 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 mx-5">
+      <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Title: 『<%= @episode.title %>』</h2>
+      <h2 class="text-gray-500 text-base mb-1 font-medium">Theme: <%= @episode.theme %></h2>
+      <p class="text-sm text-gray-500 mt-3"><%= h(@episode.content).gsub(/\n|\r|\r\n/, "<br>").html_safe %></p>
+    </div>
 
-<% if session[:guest] && @episode.guest_token != session[:guest] %>
-  <% if @episode.likes.find_by(guest_token: session[:guest]) %>
-    <%= link_to 'いいねを取り消す', episode_unlike_path(@episode),
-      data: { "turbo_method": :delete }, class: 'btn btn-danger' %>
-  <% else %>
-    <%= link_to 'いいねする', episode_like_path(@episode),
-      data: { "turbo_method": :post }, class: 'btn btn-success' %>
-  <% end %>
-<% end %>
-
-<% if session[:guest] && @episode.guest_token != session[:guest] %>
-  <div class="like-buttons">
-    <% if @episode.likes.find_by(guest_token: session[:guest]) %>
-      <button data-action="unlike" data-episode-id="<%= @episode.id %>"
-              class="btn btn-danger">いいねを取り消す</button>
-    <% else %>
-      <button data-action="like" data-episode-id="<%= @episode.id %>"
-              class="btn btn-success">いいねする</button>
+    <% content_for :reload do %>
+      <meta name="turbo-visit-control" content="reload">
     <% end %>
+
+
+    <div class="lg:w-3/5 md:w-1/2 bg-gray-200 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-center relative">
+      <div class="row mx-2" id="row20" style="display: inline-block; _display: inline;"></div>
+      <% 19.times do |n| %>
+        <div class="row mr-2" id="row<%= 19-n %>" style="display: inline-block; _display: inline;"></div>
+      <% end %>
+
+      <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+          updateRows();
+          updateThemes();
+        });
+
+
+        const themeText = <%= raw JSON.dump(@episode.theme) %>;
+        const titleText = <%= raw JSON.dump(@episode.title) %>;
+        const inputText = <%= raw JSON.dump(@episode.content) %>;
+
+        const rows        = document.querySelectorAll('.row');
+
+        function updateThemes() {
+          // テーマの表示
+          let themeVerticalText = convertToVerticalText(themeText); // 縦書き用にテーマを変換
+          const themeTreatedText = themeVerticalText.split('');
+          const themeArray = [];
+
+          for (let i = 0; i < (15 - themeTreatedText.length); i++) {
+            themeArray.push('　'); // 空白を追加
+          }
+          if (themeTreatedText != "") {
+            themeArray.push(...themeTreatedText, "について"); // テーマの文字を追加
+          };
+          rows[18].textContent = themeArray.join(''); // 表示
+        }
+
+        function convertToVerticalText(text) {
+          let verticalText = '';
+
+          text.split('').forEach(char => {
+            if (char.match(/[A-Za-z0-9\s]/)) {
+              verticalText += char.replace(/[A-Za-z0-9\s]/, s => String.fromCharCode(s.charCodeAt(0) + 0xFEE0));
+            } else {
+              verticalText += char;
+            }
+          });
+
+          return verticalText;
+        }
+
+
+        function updateRows() {
+          let contentArray = [];
+
+          // titleの処理
+          if (titleText.length > 0) {
+            rows[19].textContent = '　　' + convertToVerticalText(titleText);
+          } else {
+            rows[19].textContent = '';
+          }
+
+         // contentの処理
+          inputText.split('\n').forEach(line => {
+            while (line.length > 0) {
+              // 縦書き用にテキストを変換
+              const convertedLine = convertToVerticalText(line);
+
+              if (convertedLine.length <= 19) {
+                contentArray.push('　' + convertedLine);
+                line = '';
+              } else {
+                const firstRow = convertedLine.length > 19 ? convertedLine.substr(0, 19) : convertedLine.substr(0, 20);
+                contentArray.push('　' + firstRow);
+                line = convertedLine.substr(firstRow.length);
+                while (line.length > 0) {
+                  contentArray.push(line.substr(0, 20));
+                  line = line.substr(20);
+                }
+              }
+            }
+          });
+
+          for (let i = 0; i < rows.length - 2; i++) {
+            const reversedIndex = rows.length - 3 - i;
+            if (contentArray[i]) {
+              rows[reversedIndex].textContent = contentArray[i];
+            } else {
+              rows[reversedIndex].textContent = '';
+            }
+          }
+        }
+
+      </script>
+
+      <style type="text/css">
+        .row {
+          width: 34px;
+          height: 524px;
+          border: 2px solid #b35900;
+          background-color: #ffffff;
+          background-image: linear-gradient(to right, #ffffff, #ffffff 10%, #b35900 11%, #b35900 12%, transparent 13%, transparent 87%, #b35900 88%, #b35900 89%, #ffffff 90%, #ffffff),
+              linear-gradient(to bottom, transparent, transparent 97%, #b35900 98%, #b35900);
+          background-position: right 2px top;
+          background-size: 33px 26px;
+          font-size: 20px; /* 文字サイズを変更 */
+          line-height: 20px; /* 行間を調整 */
+          letter-spacing: 6px;
+          writing-mode: vertical-lr; /* 縦書きモード */
+        }
+      </style>
+    </div>
   </div>
-<% end %>
-
-<%= link_to '戻る', episodes_path, class: 'btn btn-secondary' %>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const likeButtons = document.querySelectorAll('[data-action="like"]');
-    const unlikeButtons = document.querySelectorAll('[data-action="unlike"]');
-
-    likeButtons.forEach(button => {
-      button.addEventListener('click', function () {
-        const episodeId = button.getAttribute('data-episode-id');
-        const url = "/episodes/" + episodeId + "/like";
-        const post_options = { turbo_method: "post" };
-
-        fetch(url, post_options)
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // いいねが成功した場合の処理
-            }
-          });
-      });
-    });
-
-    unlikeButtons.forEach(button => {
-      button.addEventListener('click', function () {
-        const episodeId = button.getAttribute('data-episode-id');
-        const url1 = "/episodes/"
-        const url2 = "/unlike"
-
-        fetch(url1 + episodeId + url2, { turbo_method: 'DELETE' })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // いいね取り消しが成功した場合の処理
-            }
-          });
-      });
-    });
-
-    // モーダルウィンドウ表示のコードをここに追加
-    // 例: モーダルを表示するためのボタンをクリックしたときの処理
-    // modalButton.addEventListener('click', function () {
-    //   // モーダルを表示するコード
-    // });
-  });
-</script>
-
-<% content_for :reload do %>
-  <meta name="turbo-visit-control" content="reload">
-<% end %>
+</section>
 

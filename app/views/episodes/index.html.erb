@@ -1,45 +1,13 @@
-<h1>エピソード一覧</h1>
-
 <% if @episodes.any? %>
-  <ul>
-    <% @episodes.each do |episode| %>
-      <li>
-        <h2><%= link_to episode.title, episode_path(episode) %></h2>
-        <p><strong>テーマ:</strong> <%= episode.theme %></p>
-        <p><strong>作成日時:</strong> <%= episode.created_at.strftime('%Y年%m月%d日 %H:%M') %></p>
-        <p><strong>いいね数:</strong> <%= episode.likes_count %></p>
-        <%= link_to '詳細を表示', episode_path(episode), class: 'btn btn-primary' %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>エピソードはまだ投稿されていません。</p>
+  <section class="text-gray-600 body-font">
+    <div class="container px-5 py-10 mx-auto">
+      <div class="flex flex-wrap -m-4">
+      <%= render @episodes %>
+      </div>
+    </div>
+  </section>
 <% end %>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const searchButton = document.getElementById('search-button');
-
-    if (searchButton) {
-      searchButton.addEventListener('click', function () {
-        const titleInput = document.getElementById('search-title');
-        const themeSelect = document.getElementById('search-theme');
-
-        const title = titleInput.value;
-        const theme = themeSelect.value;
-
-        // クエリパラメータを組み立てる
-        let queryParams = '';
-        if (title) {
-          queryParams += `?title=${encodeURIComponent(title)}`;
-        }
-        if (theme) {
-          queryParams += `${queryParams ? '&' : '?'}theme=${encodeURIComponent(theme)}`;
-        }
-
-        // 検索結果ページへ遷移
-        window.location.href = `/episodes${queryParams}`;
-      });
-    }
-  });
-</script>
+<div class="mx-auto my-1 text-center">
+  <%= paginate @episodes %>
+</div>

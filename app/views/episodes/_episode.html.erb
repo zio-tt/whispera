@@ -1,0 +1,23 @@
+<div class="p-4 lg:w-1/4">
+  <div class="h-full bg-primary bg-opacity-75 px-8 pt-12 pb-24 rounded-lg overflow-hidden text-center relative">
+    <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1"><%= episode.theme %></h2>
+    <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3"><%= episode.title %></h1>
+    <p class="leading-relaxed mb-3"><%= episode.content.length >= 30 ? episode.content.slice(0,30) : episode.content %></p>
+    <%= link_to episode_path(episode), class: "text-indigo-500 inline-flex items-center" do %>
+      さらに読む
+      <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M12 5l7 7-7 7"></path>
+      </svg>
+    <% end %>
+    <div class="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4">
+      <span class="text-gray-400 inline-flex items-center leading-none text-sm py-1 ">
+        <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+          </path>
+        </svg>
+        <%= episode.likes_count %>
+      </span>
+    </div>
+  </div>
+</div>

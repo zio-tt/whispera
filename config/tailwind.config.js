@@ -6,6 +6,7 @@ module.exports = {
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
     './app/views/**/*.{erb,haml,html,slim}',
+    '.node_modules/preline/dist/*.js',
   ],
   theme: {
     extend: {
@@ -21,7 +22,8 @@ module.exports = {
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
-    require("daisyui"),
+    require('daisyui'),
+    require('preline/plugin'),
   ],
   daisyui: {
     themes: [

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="cupcake">
+<html data-theme="pastel">
   <head>
     <title>Whispera</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,5 +18,9 @@
       <%= render 'shared/navbar' %>
     <% end %>
     <%= yield %>
+    <script src="./node_modules/preline/dist/preline.js"></script>
+    <% if controller.controller_name != "top" %>
+      <%= render 'shared/footer' %>
+    <% end %>
   </body>
 </html>

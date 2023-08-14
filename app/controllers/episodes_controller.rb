@@ -1,9 +1,10 @@
 class EpisodesController < ApplicationController
   before_action :set_episode, only: %i[show edit update destroy]
   before_action :session_confirmation, only: %i[edit update destroy]
+  before_action :set_search, only: %i[index]
+  before_action :which_page?
 
   def index
-    @episodes = Episode.all.order(created_at: :desc)
     @themes = Episode::THEMES
   end
 
@@ -54,4 +55,14 @@ class EpisodesController < ApplicationController
   def episode_params
     params.require(:episode).permit(:title, :content, :theme)
   end
+
+  def set_search
+    @q = Episode.ransack(params[:q])
+    @episodes = @q.result(distinct: true).order(created_at: :desc).page(params[:page]).per(8)
+  end
+
+  def which_page?
+    @page = action_name
+  end
+
 end

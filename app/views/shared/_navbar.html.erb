@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 rounded-full w-screen px-10 mt-3 mb-3">
+<div class="navbar bg-base-100 rounded-full w-screen px-20 mt-2">
   <div class="navbar-start">
     <div class="dropdown">
       <label tabindex="0" class="btn btn-ghost btn-circle">
@@ -9,32 +9,70 @@
       <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
         <li><%= link_to("New Episode", new_episode_path) %></li>
         <li><%= link_to("Episodes", episodes_path) %></li>
-        <li><a>Likes Rank</a></li>
-        <li><a>aboout</a></li>
+        <!-- <li><a>Likes Rank</a></li> -->
       </ul>
     </div>
   </div>
   <div class="navbar-center">
-    <%= link_to "Tsuduri", episodes_path, class: "btn btn-ghost normal-case text-xl" %>
+    <%= link_to "Tsuduri", episodes_path, class: "btn btn-ghost normal-case text-2xl" %>
   </div>
   <div class="navbar-end">
-    <% if current_page?(controller: 'episodes', action: 'index') %>
+
+    <!-- 現在のページがindexの場合 -->
+    <% if @page == "index" %>
       <div class="join">
-        <div>
-          <div>
-            <input id="search-title" class="input input-bordered join-item" placeholder="Title"/>
-          </div>
-        </div>
-        <select id="search-theme" class="select select-bordered join-item">
-          <option disabled selected>Theme</option>
-          <%= @themes.each do |theme| %>
-            <option><%= theme %></option>
-          <% end %>
-        </select>
-        <div class="indicator">
-          <button id="search-button" class="btn join-item">Search</button>
-        </div>
+        <%= search_form_for @q, url: episodes_path do |f| %>
+          <%= f.search_field :title_or_content_cont, placeholder: 'Search',
+              class: "input input-bordered join-item" %>
+          <%= f.collection_select :theme_eq, @themes, :itself, :itself,
+              { include_blank: '', prompt: "テーマを選択" }, { class: "select select-bordered join-item" } %>
+          <%= f.submit "検索", class: "btn join-item" %>
+        <% end %>
       </div>
     <% end %>
+
+    <!-- 現在のページがshowの場合 -->
+    <% if @page == "show" %>
+      <div class="join">
+      <% if session[:guest] && @episode.guest_token == session[:guest] %>
+        <%= link_to '編集', edit_episode_path(@episode), class: 'btn btn-outline btn-primary mr-2' %>
+        <%= link_to '削除', episode_path(@episode), data: { turbo_method: :delete }, class: 'btn btn-outline btn-default' %>
+      <% end %>
+
+
+      <% if session[:guest] && @episode.guest_token != session[:guest] %>
+        <%= link_to "https://twitter.com/intent/tweet?text=#{ @episode.title }%0A&url=#{ request.url }", class: 'btn btn-outline btn-default mr-2', target: :_blank, rel: "noopener noreferrer" do %>
+          <span class="text-gray-200 inline-flex items-center leading-none text-sm py-1 ">
+            Xで共有する
+          </span>
+        <% end %>
+
+        <% if @episode.likes.find_by(guest_token: session[:guest]) %>
+          <%= link_to episode_unlike_path(@episode), class: 'btn btn-outline btn-default', data: { "turbo_method": :delete } do %>
+            <span class="text-gray-200 inline-flex items-center leading-none text-sm py-1 ">
+              <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                </path>
+              </svg>
+              <%= @episode.likes_count %>
+            </span>
+          <% end %>
+        <% else %>
+          <%= link_to episode_like_path(@episode), class: 'btn btn-outline btn-primary',
+            id: 'open-modal-2', data: { "turbo_method": :post } do  %>
+            <span class="text-gray-200 inline-flex items-center leading-none text-sm py-1 ">
+              <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                </path>
+              </svg>
+              <%= @episode.likes_count %>
+            </span>
+          <% end %>
+
+        <% end %>
+      <% end %>
+      </div>
+    <% end %>
+
   </div>
 </div>
